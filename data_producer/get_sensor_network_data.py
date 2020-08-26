@@ -3,7 +3,6 @@
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub, SubscribeListener
 
-
 channel_name = 'pubnub-sensor-network'
 
 pnconfig = PNConfiguration()
@@ -19,7 +18,9 @@ my_listener.wait_for_connect()
 print('connected')
 
 counter = 1
-while(counter < 100):
+stop_counter = 10
+
+while(counter < stop_counter):
     print(my_listener.wait_for_message_on(channel_name).message)
     counter += 1
 
