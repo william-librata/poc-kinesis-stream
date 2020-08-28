@@ -1,4 +1,4 @@
-#!./venv/bin/python
+#!../venv/bin/python
 
 import boto3
 import time
@@ -6,8 +6,6 @@ import datetime
 import json
 import ast
 from decimal import Decimal
-
-
 
 
 def remove_empty_string(dic):
@@ -21,57 +19,117 @@ def remove_empty_string(dic):
                 remove_empty_string(entry)
     return dic
 
-#dict = json.loads('{"key1":"val1", "key2":"val2", "key3":"", "user": {"id": 1666401798, "id_str": "1666401798", "name": "", "test": 1}}')
-#dict_fix = remove_empty_string(dict)
-#print(dict_fix)
+
+def get_dynamodb_table(table_name):
+    # setup dynamodb conn
+    dynamodb = boto3.resource('dynamodb')
+    return dynamodb.Table('TwitterData')
 
 
+def consumer_exists(stream_arn, consumer_name):
+    try:
+        response = client.describe_stream_consumer(
+            StreamARN=stream_arn,
+            ConsumerName=consumer_name
+        )
+        return True
+    except client.exceptions.ResourceNotFoundException:
+        return False
 
 
+def register_consumer(stream_arn, consumer_name, force=True):
+
+    # check if exists
+    if consumer_exists(stream_arn, consumer_name):
+        print('Consumer exists')
+        if force:
+            deregister_consumer(stream_arn, consumer_name)
+        else:
+            return
+
+    # register consumer
+    response = client.register_stream_consumer(
+        StreamARN=stream_arn,
+        ConsumerName=consumer_name
+    )
+    consumer_arn = response['Consumer']['ConsumerARN']
+    consumer_status = response['Consumer']['ConsumerStatus']
+
+    # wait until consumer active
+    while consumer_status != 'ACTIVE':
+        time.sleep(5)
+        response = client.describe_stream_consumer(
+            StreamARN=stream_arn,
+            ConsumerName=consumer_name
+        )
+        consumer_status = response['ConsumerDescription']['ConsumerStatus']
+
+    return consumer_arn
 
 
-client = boto3.client('kinesis')
+def deregister_consumer(stream_arn, consumer_name):
+    response = client.deregister_stream_consumer(
+        StreamARN=stream_arn,
+        ConsumerName=consumer_name
+    )
 
-response = client.describe_stream(StreamName='TwitterDataStream')
-#print(response)
-#print(response['StreamDescription']['Shards'][0])
-#print(response['StreamDescription']['Shards'][1])
-#print(response['StreamDescription']['Shards'][2])
-
-shard_id = response['StreamDescription']['Shards'][1]['ShardId']
-
-print(shard_id)
-
-the_time = datetime.datetime.now()
-
-shard_iterator = client.get_shard_iterator(StreamName='TwitterDataStream', ShardId=shard_id,
-                                           ShardIteratorType='TRIM_HORIZON')['ShardIterator']
-
-# setup dynamodb conn
-dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('TwitterData')
-
-counter = 0
-while(True and counter < 10000):
-
-    response = client.get_records(ShardIterator=shard_iterator, Limit=1)
-    shard_iterator = response['NextShardIterator']
-    if len(response['Records']) > 0:
-        data = json.loads(response['Records'][0]['Data'], parse_float=Decimal)
-        print('Processing id: $s', data['id'])
-        data_fix = remove_empty_string(data)
-        try:
-
-            table.put_item(
-                Item=data_fix
-            )
-            counter += 1
-
-        except:
-            print('ERROR : ')
-            print('Raw data : %s', data)
-            print('Fixed data : %s', data)
-    else:
-        print('Waiting..')
+    while consumer_exists(stream_arn, consumer_name):
         time.sleep(5)
 
+
+def fetch_records(stream_name, stream_arn, shard_id, consumer_name, consumer_arn):
+
+    # get dynamodb table to be inserted
+    table = get_dynamodb_table('SensorNetworkData')
+
+    response = client.subscribe_to_shard(
+        ConsumerARN=consumer_arn,
+        ShardId=shard_id,
+        StartingPosition={'Type': 'TRIM_HORIZON'}
+    )
+
+    shard_iterator = client.get_shard_iterator(StreamName=stream_name,
+                                               ShardId=shard_id,
+                                               ShardIteratorType='TRIM_HORIZON')['ShardIterator']
+
+    counter = 0
+    while(True and counter < 10000):
+
+        response = client.get_records(ShardIterator=shard_iterator)
+        shard_iterator = response['NextShardIterator']
+        if len(response['Records']) > 0:
+            data = json.loads(response['Records'][0]['Data'], parse_float=Decimal)
+            print('Processing sensor: %s', data['sensor_uuid'])
+            data_fix = remove_empty_string(data)
+            try:
+                '''
+                table.put_item(
+                    Item=data_fix
+                )
+                '''
+                print(data_fix)
+                counter += 1
+
+            except:
+                print('ERROR : ')
+        else:
+            print('Waiting..')
+            time.sleep(5)
+
+
+if __name__ == '__main__':
+
+    stream_name = 'KinesisStream'
+
+    # setup kinesis
+    client = boto3.client('kinesis')
+    response = client.describe_stream(StreamName=stream_name)
+    stream_arn = response['StreamDescription']['StreamARN']
+    # get stream details
+    shard_id = response['StreamDescription']['Shards'][2]['ShardId']
+
+    consumer_name = 'MarketOrderDataConsumer1'
+
+    consumer_arn = register_consumer(stream_arn, consumer_name)
+
+    fetch_records(stream_name, stream_arn, shard_id, consumer_name, consumer_arn)

@@ -102,12 +102,12 @@ if __name__ == '__main__':
     channel_name = 'pubnub-sensor-network'
     subscriber_key = 'sub-c-5f1b7c8e-fbee-11e3-aa40-02ee2ddab7fe'
     stream_name = 'KinesisStream'
-    partition_key = 'HADES-SensorNetworkData4'
+    partition_key = 'HADES-SensorNetworkData'
     data_limit = 20
     batch_size = 10
 
     # upload data one at a time
-    upload_data(channel_name, subscriber_key, stream_name, partition_key, data_limit)
+    #upload_data(channel_name, subscriber_key, stream_name, partition_key, data_limit)
 
     # upload data in batch
     upload_data_batch(channel_name, subscriber_key, stream_name, partition_key, batch_size, data_limit)
