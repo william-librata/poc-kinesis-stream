@@ -101,7 +101,7 @@ if __name__ == '__main__':
     # setup parameter
     channel_name = 'pubnub-sensor-network'
     subscriber_key = 'sub-c-5f1b7c8e-fbee-11e3-aa40-02ee2ddab7fe'
-    stream_name = 'KinesisStream'
+    stream_name = 'DataStream'
     partition_key = 'HADES-SensorNetworkData'
     data_limit = 20
     batch_size = 10
