@@ -2,6 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c7f61cff-887f-409a-9fe0-bf382339f0cc" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/poc-kinesis-stream.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/poc-kinesis-stream.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data_consumer/consume_stream_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_consumer/consume_stream_data.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data_producer/upload_to_kinesis_stream.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_producer/upload_to_kinesis_stream.py" afterDir="false" />
@@ -12,10 +15,10 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../cloud-formation-template" />
   </component>
   <component name="ProjectId" id="1ggDleJCNViAmw4D2lULWJJ771h" />
-  <component name="ProjectLevelVcsManager">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="1" id="Add" />
   </component>
   <component name="ProjectViewState">
@@ -24,11 +27,12 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/data_producer" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../cloud-formation-template/template" />
     <property name="restartRequiresConfirmation" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/../cloud-formation-template/template" />
       <recent name="$PROJECT_DIR$/data_producer" />
     </key>
   </component>
@@ -94,29 +98,29 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="776" y="258" width="424" height="484" key="FileChooserDialogImpl" timestamp="1598624052841">
+    <state x="776" y="258" width="424" height="484" key="FileChooserDialogImpl" timestamp="1598699577967">
       <screen x="67" y="27" width="1853" height="948" />
     </state>
-    <state x="776" y="258" width="424" height="484" key="FileChooserDialogImpl/67.27.1853.948@67.27.1853.948" timestamp="1598624052841" />
-    <state width="1807" height="255" key="GridCell.Tab.0.bottom" timestamp="1598626981620">
+    <state x="776" y="258" width="424" height="484" key="FileChooserDialogImpl/67.27.1853.948@67.27.1853.948" timestamp="1598699577967" />
+    <state width="1807" height="217" key="GridCell.Tab.0.bottom" timestamp="1598709690304">
       <screen x="67" y="27" width="1853" height="948" />
     </state>
-    <state width="1807" height="255" key="GridCell.Tab.0.bottom/67.27.1853.948@67.27.1853.948" timestamp="1598626981620" />
-    <state width="1807" height="255" key="GridCell.Tab.0.center" timestamp="1598626981619">
+    <state width="1807" height="217" key="GridCell.Tab.0.bottom/67.27.1853.948@67.27.1853.948" timestamp="1598709690304" />
+    <state width="1807" height="217" key="GridCell.Tab.0.center" timestamp="1598709690302">
       <screen x="67" y="27" width="1853" height="948" />
     </state>
-    <state width="1807" height="255" key="GridCell.Tab.0.center/67.27.1853.948@67.27.1853.948" timestamp="1598626981619" />
-    <state width="1807" height="255" key="GridCell.Tab.0.left" timestamp="1598626981618">
+    <state width="1807" height="217" key="GridCell.Tab.0.center/67.27.1853.948@67.27.1853.948" timestamp="1598709690302" />
+    <state width="1807" height="217" key="GridCell.Tab.0.left" timestamp="1598709690301">
       <screen x="67" y="27" width="1853" height="948" />
     </state>
-    <state width="1807" height="255" key="GridCell.Tab.0.left/67.27.1853.948@67.27.1853.948" timestamp="1598626981618" />
-    <state width="1807" height="255" key="GridCell.Tab.0.right" timestamp="1598626981620">
+    <state width="1807" height="217" key="GridCell.Tab.0.left/67.27.1853.948@67.27.1853.948" timestamp="1598709690301" />
+    <state width="1807" height="217" key="GridCell.Tab.0.right" timestamp="1598709690303">
       <screen x="67" y="27" width="1853" height="948" />
     </state>
-    <state width="1807" height="255" key="GridCell.Tab.0.right/67.27.1853.948@67.27.1853.948" timestamp="1598626981620" />
-    <state x="607" y="181" width="762" height="637" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1598625579029">
+    <state width="1807" height="217" key="GridCell.Tab.0.right/67.27.1853.948@67.27.1853.948" timestamp="1598709690303" />
+    <state x="607" y="181" width="762" height="637" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1598702468144">
       <screen x="67" y="27" width="1853" height="948" />
     </state>
-    <state x="607" y="181" width="762" height="637" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/67.27.1853.948@67.27.1853.948" timestamp="1598625579029" />
+    <state x="607" y="181" width="762" height="637" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/67.27.1853.948@67.27.1853.948" timestamp="1598702468144" />
   </component>
 </project>

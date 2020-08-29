@@ -20,12 +20,6 @@ def remove_empty_string(dic):
     return dic
 
 
-def get_dynamodb_table(table_name):
-    # setup dynamodb conn
-    dynamodb = boto3.resource('dynamodb')
-    return dynamodb.Table('TwitterData')
-
-
 def consumer_exists(stream_arn, consumer_name):
     try:
         response = client.describe_stream_consumer(
@@ -37,7 +31,7 @@ def consumer_exists(stream_arn, consumer_name):
         return False
 
 
-def register_consumer(stream_arn, consumer_name, force=True):
+def register_consumer(stream_arn, consumer_name, force=False):
 
     # check if exists
     if consumer_exists(stream_arn, consumer_name):
@@ -119,17 +113,42 @@ def fetch_records(stream_name, stream_arn, shard_id, consumer_name, consumer_arn
 
 if __name__ == '__main__':
 
-    stream_name = 'KinesisStream'
+    stream_name = 'DataStream'
+    consumer_name = 'StreamConsumer3'
+
+    # setup dynamodb
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table('DataStream')
 
     # setup kinesis
     client = boto3.client('kinesis')
+
+    # get stream details
     response = client.describe_stream(StreamName=stream_name)
     stream_arn = response['StreamDescription']['StreamARN']
-    # get stream details
     shard_id = response['StreamDescription']['Shards'][2]['ShardId']
 
-    consumer_name = 'MarketOrderDataConsumer1'
+    # get consumer details
+    response = client.describe_stream_consumer(
+        StreamARN=stream_arn,
+        ConsumerName=consumer_name
+    )
+    consumer_arn = response['ConsumerDescription']['ConsumerARN']
 
-    consumer_arn = register_consumer(stream_arn, consumer_name)
+    # subscribe to shard
+    response = client.subscribe_to_shard(
+        ConsumerARN=consumer_arn,
+        ShardId=shard_id,
+        StartingPosition={'Type': 'TRIM_HORIZON'}
+    )
 
-    fetch_records(stream_name, stream_arn, shard_id, consumer_name, consumer_arn)
+    # iterate event stream
+    for event in response['EventStream']:
+        print(event)
+        if len(event['SubscribeToShardEvent']['Records']) > 0:
+            # if records are not empty
+            for record in event['SubscribeToShardEvent']['Records']:
+                data = remove_empty_string(json.loads(record['Data'], parse_float=Decimal))
+                print(data)
+                table.put_item(Item=data)
+
